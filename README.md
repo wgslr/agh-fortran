@@ -22,6 +22,11 @@ make clean
 make all KIND=8
 ```
 
+## Running
+Run by `./out/main n` where `n` is the desired resolution. The output is
+a list of values for each point and finally a line
+with `kind`, `n` and average `error` (see Accuracy).
+
 # Results
 
 ## Calulated solutions 
@@ -38,7 +43,6 @@ Averages of absolute differences between calculated and expected value are store
 Each of these files consists of columns expressing used `kind`, number of divisions `n` and the average `error`.
 
 Graphs of the relation error(n) were generated using python pandas and matplotlib. Note the errors magnitues presented in top-left corners of the images.
-
 ### kind=4
 Error was calculated for each n in `1..499` and for every fifth n in `500..1000`, hence the change in graph density.
 ![kind4graph](results/accuracy.k4.png)
