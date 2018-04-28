@@ -16,7 +16,6 @@ before switching compilers.
 ## `kind` adjustemnt
 
 
-
 `kind` value used for floating point variables can be changed by modifying Makefile variable `KIND`, as in
 ```
 make clean
@@ -25,7 +24,12 @@ make all KIND=8
 
 # Results
 
-## Calu
+## Calulated solutions 
+
+Actual solutions, calculated for `n=1000`, are stored in `results/output.k{4,8,16}.dat` files.
+
+On a graph they are represented (as exptected) by a linear functions:
+![output](results/accuracy.k16.png)
 
 ## Accuracy
 
@@ -41,9 +45,9 @@ Error was calculated for each n in `1..499` and for every fifth n in `500..1000`
 
 ### kind=8
 Error was calculated for each n in `1..499` and for every fifth n in `500..1000`.
-![kind4graph](results/accuracy.k8.png)
+![kind8graph](results/accuracy.k8.png)
 
 ### kind=16
 Error was calculated for each n in `1..1000`.
-![kind4graph](results/accuracy.k16.png)
+![kind16graph](results/accuracy.k16.png)
 
