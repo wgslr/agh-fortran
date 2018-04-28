@@ -7,7 +7,7 @@ GFLAGS=-O3  -ffree-form -std=f2008 -fimplicit-none -Wall -pedantic -fbounds-chec
 all: out/main 
 
 
-out/main: *.f90
+out/main: gauss.f90 constants.f90 main.f90
 	mkdir -p out
 	-ifort $^ -o $@ $(IFLAGS)
 

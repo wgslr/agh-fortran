@@ -11,7 +11,7 @@ program main
   use constants
   use gauss
   implicit none
-  real(kind = iKIND) :: A(3, 3), X(3), idx
+  real(kind = iKIND) :: A(3, 3), X(3), idx 
   integer(kind=8) :: i, j
 
 
@@ -32,7 +32,7 @@ program main
   !     X(i) = idx
   !     idx = idx + 1.0
   ! enddo
-  A = reshape ( (/1.0, 1.0, 1.0, 2.0, 3.0, 5.0, 4.0, 0.0, 5.0 /) , (/ 3, 3 /))
+  A = reshape ( (/1.0, 1.0, 1.0, 2.0, 3.0, 5.0, 4.0, 0.0, 5.0 /) , shape(A))
   X = (/ 5.0, 8.0, 2.0 /)
 
   call eliminate(A, X, 3)
