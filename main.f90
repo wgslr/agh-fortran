@@ -28,14 +28,14 @@ subroutine init_matrices(A, X, n, h)
   ! write (*, '(F3.3, F3.3, F3.3)') side, diag, h
   ! print *, side, diag, h
 
-  do i = 2,n-1
-    A(i, i - 1) = side
-    A(i, i + 1) = side
+  do i = 1,n-1
+    A(i - 1, i) = side
+    A(i + 1, i) = side
     A(i, i) = diag
   end do
-  A(1, 1) = diag
-  A(1, 2) = side
-  A(n, n - 1) = side
+  A(0, 0) = diag
+  A(1, 0) = side
+  A(n - 1, n) = side
   A(n, n) = diag
 
     
