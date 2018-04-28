@@ -1,23 +1,48 @@
-
 module gauss
-implicit none
+  implicit none
 
-! integer, parameter :: iKIND2 = DEF_KIND
+  ! integer, parameter :: iKIND2 = DEF_KIND
 
-contains
-subroutine eliminate(arg1,  arg2)
-  use constants
-  ! real,intent(in)  :: arg1
-  ! real(kind = iKIND), intent(in) ::  arg2
-  real,intent(in)  :: arg1
-  real(kind = iKIND), intent(in) ::  arg2
-  ! real, intent(in) ::  arg2
+  contains
+  subroutine print_diagonal(A, n)
+    use constants
+    implicit none
+    integer :: i
+    integer, intent(in) :: n
+    real(kind = iKIND), intent(inout) :: A(n, n)
+    do i = 1, n
+      print *, A(i, i)
+    end do
+  end subroutine print_diagonal
 
-  ! write(*,*) "Gauss is eliminating you"
-  !   !TODO_add_body
-  write(*,*) "Gauss says hello"
-  write(*,*) "Kind is: ", iKIND
+  subroutine eliminate(A, X, n)
+    use constants
+    integer :: i, j
+    integer, intent(in) :: n
+    real(kind = iKIND), intent(inout) :: A(N, N), X(N)
+    real(kind = iKIND) :: ratio
+
+    print *, "Arrays to eliminate: ", A, X
     
-end subroutine eliminate
+    do i = 1, N
+      do j = 1, N
+        IF (i .NE. j) THEN
+          ratio = A(i, j) / A(i, i)
+          A(:,j) = A(:,j) - ratio * A(:, i)
+          X(j) = X(j) - ratio * x(i)
+        END IF
+
+        print *, "After ", i, j, ": A = ", A, "X = ", X
+        print *. "Diagonal: "
+        call print_diagonal(A, n)
+      END DO
+      ! scale row i to have 1 on the diagonal
+      A(:, i) = A(:, i) / A(i, i)
+      X(i) = X(i) / A(i, i)
+    END DO
+
+    print *, "Eliminated arrays: ", A, X
+      
+  end subroutine eliminate
 end module gauss
   

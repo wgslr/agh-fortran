@@ -1,4 +1,9 @@
 out 
+/main
+/gmain
+/vendor
+
+## From https://github.com/github/gitignore/blob/master/Fortran.gitignore
 # Prerequisites
 *.d
 
