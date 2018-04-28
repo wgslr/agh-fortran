@@ -18,36 +18,18 @@ subroutine init_matrices(A, X, n, h)
   side = 1/(h**2)
   diag = -2 * side
 
-  print *, "h: ", h, "side: ", side, "diag: ", diag
-
   X(:) = real(0, kind=iKIND)
   X(n) = real(1, kind=iKIND)
-  ! X(:) = (/ 3., 0., -18., -3. /)  
-
-  ! X(:) = real(1, kind=iKIND)
   A(:,:) = real(0, kind=iKIND)
-
-  ! X(:) = (/ ((h * i), i = 1, n) /)
-
-  ! print *, "Side, diag, h:"
-  ! write (*, '(F3.3, F3.3, F3.3)') side, diag, h
-  ! print *, side, diag, h
 
   do i = 1,n-1
     A(i - 1, i) = side
     A(i + 1, i) = side
     A(i, i) = diag
   end do
-  A(0, 0) = diag
-  A(1, 0) = side
-  A(n - 1, n) = side
-  A(n, n) = diag
-  A(:,0) = 0
-  A(:,n) = 0
+
   A(0, 0) = 1
   A(n, n) = 1
-
-    
 end subroutine init_matrices
 
 program main
@@ -56,74 +38,67 @@ program main
   implicit none
   real(kind = iKIND), allocatable, dimension(:,:) :: A
   real(kind = iKIND), allocatable, dimension(:) :: X, RES, IDEAL
+  real(kind = 16), allocatable, dimension(:) :: ERROR
   real(kind = iKIND) :: h
   integer(kind=8) :: i, j, n, parse_result
   character(len=10) :: arg
-
-  print *, "Start"
 
   if (command_argument_count() .NE. 1) then
     print *, "Elements count should be given as program argument, exiting"
     error stop
   else 
-  print *, "Argument count: ", command_argument_count()
     call get_command_argument(1, arg)
   end if
 
 
   read(arg, *, iostat=parse_result) n
   if (parse_result .NE. 0) then
-    print *, "Invalid size argument!"
+    print *, "Invalid size argument format!"
     error stop
   end if
   
-  ! actual array size - skipping x = 0
-  h = real(1.0/n, kind=iKIND)
 
   allocate(A(0:n, 0:n))
   allocate(X(0:n))
   allocate(RES(0:n))
   allocate(IDEAL(0:n))
-  IDEAL(:) = (/ ((h * i), i = 0, n) /)
+  allocate(ERROR(0:n))
+  h = real(1.0/n, kind=iKIND)
+  ! IDEAL(:) = (/ (real(1, kind=16) * i / n), i = 0, n) /)
+
+  ! IDEAL(:) = (/ (1_16 * i / n), i = 0, n /)
+  IDEAL(0) = 0
+  do i = 1, n
+    ! IDEAL(i) = IDEAL(i-1) + real(1, kind=16)/n
+    IDEAL(i) = real(1, kind=16) / real(n, kind=16) * i
+  end do
+    ! IDEAL(1) = 1
 
   call init_matrices(A, X, n, h)
 
   call eliminate(A, X, n)
 
-  print *, "A: "
-  call print_rows(A, n)
-  print *, "X: ", X
-
-  RES(:) = real(0, kind=iKIND)
-  ! RES(n + 1) = 1
-  RES(n) = real(1, kind=iKIND)
-
-  ! do i = 1, n
-  !   ! RES(i) = A(i, i) * (h * i)
-  !   ! RES(i) = X(i) * (h * i)
-  !   RES(i) = X(i) / A(i, i) ! knowing that A(i, k) for k != i is 0
-  ! end do
-
-  print *, "RES before sums: ", RES
-
-  do i = n-1, 1, -1
-    ! see http://eduinf.waw.pl/inf/alg/001_search/0076.php
-    ! RES(i) = A(i, i) * (h * i)
-    ! RES(i) = X(i) * (h * i)
-    RES(i) = X(i)
-    do j = n, i + 1, -1
-      print *, "i, j: ", i, j
-      print *, "RES(i): ", RES(i), "A(j, i): ", A(j,i), "RES(j): ", RES(j), "A(j, i) * RES(j): ", A(j, i) * RES(j)
-      print *, "RES:  ", RES
-      RES(i) = RES(i) - (A(j, i) * RES(j))
-    end do
-    ! RES(i) = RES(i) / A(i, i)
+  do i = 1, n-1
+    X(i) = X(i) / A(i,i)
   end do
 
-  print *, "Result: ", RES    
+  ! avg_err = sum((X - IDEAL))) / (n + 1)
+  ERROR(:) = X - IDEAL
+  ! print *, "A: ", A
+  ! print *, "X: ", X
+  ! print *, "IDEAL: ", IDEAL
+  ! print *, "ERROR: ", ERROR
+  print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
+  ! print *, avg_er
 
-  print *, "Ideal: ", IDEAL    
-  print *, "Diff: ", IDEAL - RES
+  ! print *, "A: "
+  ! call print_rows(A, n)
+  ! print *, "X: ", X
+
+  ! print *, "Result: ", X    
+
+  ! print *, "Ideal: ", IDEAL    
+  ! print *, "Diff: ", IDEAL - X
 
   ! if(allocated(A)) deallocate(A)
   ! if(allocated(X)) deallocate(X)
