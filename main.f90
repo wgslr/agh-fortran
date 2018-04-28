@@ -37,8 +37,8 @@ program main
   use gauss
   implicit none
   real(kind = iKIND), allocatable, dimension(:,:) :: A
-  real(kind = iKIND), allocatable, dimension(:) :: X, RES, IDEAL
-  real(kind = 16), allocatable, dimension(:) :: ERROR
+  real(kind = iKIND), allocatable, dimension(:) :: X, RES
+  real(kind = 16), allocatable, dimension(:) :: IDEAL, ERROR
   real(kind = iKIND) :: h
   integer(kind=8) :: i, n, parse_result
   character(len=10) :: arg
@@ -64,43 +64,21 @@ program main
   allocate(IDEAL(0:n))
   allocate(ERROR(0:n))
   h = real(1.0/n, kind=iKIND)
-  ! IDEAL(:) = (/ (real(1, kind=16) * i / n), i = 0, n) /)
 
-  ! IDEAL(:) = (/ (1_16 * i / n), i = 0, n /)
   IDEAL(0) = 0
   do i = 1, n
-    ! IDEAL(i) = IDEAL(i-1) + real(1, kind=16)/n
     IDEAL(i) = real(1, kind=16) / real(n, kind=16) * i
   end do
-    ! IDEAL(1) = 1
 
   call init_matrices(A, X, n, h)
-
   call eliminate(A, X, n)
 
   do i = 1, n-1
+    ! for the sake of completeness, although A(i,i) == 1
     X(i) = X(i) / A(i,i)
   end do
 
-  ! avg_err = sum((X - IDEAL))) / (n + 1)
   ERROR(:) = X - IDEAL
-  ! print *, "A: ", A
-  ! print *, "X: ", X
-  ! print *, "IDEAL: ", IDEAL
-  ! print *, "ERROR: ", ERROR
   print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
-  ! print *, avg_er
-
-  ! print *, "A: "
-  ! call print_rows(A, n)
-  ! print *, "X: ", X
-
-  ! print *, "Result: ", X    
-
-  ! print *, "Ideal: ", IDEAL    
-  ! print *, "Diff: ", IDEAL - X
-
-  ! if(allocated(A)) deallocate(A)
-  ! if(allocated(X)) deallocate(X)
 
 end program main
