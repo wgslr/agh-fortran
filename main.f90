@@ -1,37 +1,3 @@
-! Returns expected ideal value according
-! to f(x) = x
-subroutine expected(x, val)
-  use constants
-  real(kind=iKIND),intent(in)  :: x
-  real(kind=iKIND),intent(out) ::  val
-  val = x
-end subroutine expected
-
-subroutine init_matrices(A, X, n, h)
-  use constants
-  integer(kind=8), intent(in) :: n
-  integer(kind=8) :: i
-  real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
-  real(kind = iKIND), intent(inout) :: X(0:n)
-  real(kind = iKIND), intent(in) :: h
-  real(kind = iKIND) :: diag, side
-  side = 1/(h**2)
-  diag = -2 * side
-
-  X(:) = real(0, kind=iKIND)
-  X(n) = real(1, kind=iKIND)
-  A(:,:) = real(0, kind=iKIND)
-
-  do i = 1,n-1
-    A(i - 1, i) = side
-    A(i + 1, i) = side
-    A(i, i) = diag
-  end do
-
-  A(0, 0) = 1
-  A(n, n) = 1
-end subroutine init_matrices
-
 program main
   use constants
   use gauss
@@ -78,7 +44,35 @@ program main
     X(i) = X(i) / A(i,i)
   end do
 
+
   ERROR(:) = X - IDEAL
   print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
+
+  contains
+
+    subroutine init_matrices(A, X, n, h)
+      use constants
+      integer(kind=8), intent(in) :: n
+      integer(kind=8) :: i
+      real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
+      real(kind = iKIND), intent(inout) :: X(0:n)
+      real(kind = iKIND), intent(in) :: h
+      real(kind = iKIND) :: diag, side
+      side = 1/(h**2)
+      diag = -2 * side
+
+      X(:) = real(0, kind=iKIND)
+      X(n) = real(1, kind=iKIND)
+      A(:,:) = real(0, kind=iKIND)
+
+      do i = 1,n-1
+        A(i - 1, i) = side
+        A(i + 1, i) = side
+        A(i, i) = diag
+      end do
+
+      A(0, 0) = 1
+      A(n, n) = 1
+    end subroutine init_matrices
 
 end program main
