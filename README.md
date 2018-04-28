@@ -19,13 +19,13 @@ before switching compilers.
 
 `kind` value used for floating point variables can be changed by modifying Makefile variable `KIND`, as in
 ```
-make all -B KIND=8
+make clean
+make all KIND=8
 ```
 
-The `-B` switch forces make to rebuild project even when output files exist.  
-You may need to issue above command twice to fix conflicts with module files compiled with other `KIND` option.
-
 # Results
+
+## Calu
 
 ## Accuracy
 

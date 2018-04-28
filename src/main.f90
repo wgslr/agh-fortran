@@ -44,9 +44,12 @@ program main
     X(i) = X(i) / A(i,i)
   end do
 
+  do i = 0, n
+    print *, i, X(i)
+  end do
 
-  ERROR(:) = X - IDEAL
-  print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
+  ! ERROR(:) = X - IDEAL
+  ! print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
 
   contains
 
