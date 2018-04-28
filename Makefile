@@ -6,11 +6,10 @@ GFLAGS=-O3  -ffree-form -std=f2008 -fimplicit-none -Wall -pedantic -fbounds-chec
 
 all: out/main
 
-
-out/main: gauss.f90 constants.f90 main.f90
+out/main: src/gauss.f90 src/constants.f90 src/main.f90
 	mkdir -p out
 	ifort $^ -o $@ $(IFLAGS)
 
-out/gmain: *.f90
+out/gmain: src/*.f90
 	mkdir -p out
 	gfortran $^ -o $@ $(GFLAGS)

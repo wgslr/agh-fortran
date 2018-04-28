@@ -58,6 +58,7 @@ program main
       real(kind = iKIND), intent(inout) :: X(0:n)
       real(kind = iKIND), intent(in) :: h
       real(kind = iKIND) :: diag, side
+      ! values to be set on the diagonal and one colument left/right
       side = 1/(h**2)
       diag = -2 * side
 
