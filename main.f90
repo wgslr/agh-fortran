@@ -10,7 +10,7 @@ end subroutine expected
 subroutine init_matrices(A, X, n, h)
   use constants
   integer(kind=8), intent(in) :: n
-  integer(kind=8) :: i, j
+  integer(kind=8) :: i
   real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
   real(kind = iKIND), intent(inout) :: X(0:n)
   real(kind = iKIND), intent(in) :: h
@@ -40,7 +40,7 @@ program main
   real(kind = iKIND), allocatable, dimension(:) :: X, RES, IDEAL
   real(kind = 16), allocatable, dimension(:) :: ERROR
   real(kind = iKIND) :: h
-  integer(kind=8) :: i, j, n, parse_result
+  integer(kind=8) :: i, n, parse_result
   character(len=10) :: arg
 
   if (command_argument_count() .NE. 1) then
