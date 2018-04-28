@@ -7,12 +7,47 @@ subroutine expected(x, val)
   val = x
 end subroutine expected
 
+subroutine init_matrices(A, X, n, h)
+  use constants
+  integer(kind=8), intent(in) :: n
+  integer(kind=8) :: i, j
+  real(kind = iKIND), intent(inout) :: A(n, n)
+  real(kind = iKIND), intent(inout) :: X(n)
+  real(kind = iKIND), intent(in) :: h
+  real(kind = iKIND) :: diag, side
+  side = 1/(h**2)
+  diag = -2 * side
+
+  ! X(:) = real(0, kind=iKIND)
+  X(:) = 1.0
+  A(:,:) = real(0, kind=iKIND)
+
+  ! X(:) = (/ ((h * i), i = 1, n) /)
+
+  ! print *, "Side, diag, h:"
+  ! write (*, '(F3.3, F3.3, F3.3)') side, diag, h
+  ! print *, side, diag, h
+
+  do i = 2,n-1
+    A(i, i - 1) = side
+    A(i, i + 1) = side
+    A(i, i) = diag
+  end do
+  A(1, 1) = diag
+  A(1, 2) = side
+  A(n, n - 1) = side
+  A(n, n) = diag
+
+    
+end subroutine init_matrices
+
 program main
   use constants
   use gauss
   implicit none
   real(kind = iKIND), allocatable, dimension(:,:) :: A
-  real(kind = iKIND), allocatable, dimension(:) :: X
+  real(kind = iKIND), allocatable, dimension(:) :: X, RES, IDEAL
+  real(kind = iKIND) :: h
   integer(kind=8) :: i, j, n, parse_result
   character(len=10) :: arg
 
@@ -32,32 +67,49 @@ program main
     print *, "Invalid size argument!"
     error stop
   end if
+  
+  ! actual array size - skipping x = 0
+  h = real(1.0/n, kind=iKIND)
+  n = n - 1
 
   allocate(A(n, n))
   allocate(X(n))
+  allocate(RES(0:n + 1))
+  allocate(IDEAL(0:n + 1))
+  IDEAL(:) = (/ ((h * i), i = 0, n+1) /)
 
-!   ! call eliminate(1.0, 2.0d0)
-!   write(*,*) "Hello World"
-!   arr(1, 1) = 0.5d0
-!   call expected(arr(1, 1), arr(1, 2))
-!   print *, "Expected: ", arr(1, 2)
-!   idx = 1d0
-  ! idx = 1.0
-  ! do i = 1,3
-  !     do j = 1,3
-  !         print *, i, j, idx
-  !         A(i, j) = idx + 7
-  !         idx = idx + 1.0
-  !     enddo
-  !     X(i) = idx
-  !     idx = idx + 1.0
-  ! enddo
-  ! A = reshape ( (/1.0, 1.0, 1.0, 2.0, 3.0, 5.0, 4.0, 0.0, 5.0 /) , shape(A))
-  ! X = (/ 5.0, 8.0, 2.0 /)
+  call init_matrices(A, X, n, h)
 
-  ! call eliminate(A, X, 3)
+  call eliminate(A, X, n)
 
-!   print *, arr
+  print *, "X: ", X
+
+  RES(:) = 0
+  RES(n + 1) = 1
+  RES(n) = X(n) / A(n, n)
+  ! do i = 1, n
+  !   ! RES(i) = A(i, i) * (h * i)
+  !   ! RES(i) = X(i) * (h * i)
+  !   RES(i) = X(i) / A(i, i) ! knowing that A(i, k) for k != i is 0
+  ! end do
+  do i = n-1, 1, -1
+    ! see http://eduinf.waw.pl/inf/alg/001_search/0076.php
+    ! RES(i) = A(i, i) * (h * i)
+    ! RES(i) = X(i) * (h * i)
+    RES(i) = X(i)
+    do j = n, i + 1, -1
+      print *, "i, j: ", i, j
+      print *, RES(i), A(i,j), RES(j)
+      RES(i) = RES(i) - A(i, j) * RES(j)
+    end do
+    RES(i) = RES(i) / A(i, i)
+  end do
+
+  print *, "Result: ", RES    
+
+  print *, "Ideal: ", IDEAL    
+  print *, "Diff: ", IDEAL - RES
+  ! print *, (IDEAL - RES)
 
   if(allocated(A)) deallocate(A)
   if(allocated(X)) deallocate(X)

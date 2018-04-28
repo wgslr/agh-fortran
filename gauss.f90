@@ -34,7 +34,7 @@ module gauss
 
     print *, "Arrays to eliminate: "
     call print_rows(A, n)
-    call print_rows(X, n)
+    print *, X
 
     do i = 1, N
       do j = 1, N
@@ -43,12 +43,12 @@ module gauss
           A(:,j) = A(:,j) - ratio * A(:, i)
           X(j) = X(j) - ratio * x(i)
 
-          print *, "After ", i, j, ": A = "
-          call print_rows(A, n)
+          ! print *, "After ", i, j, ": A = "
+          ! call print_rows(A, n)
 
-          print *, "X = ", X
-          print *, "Diagonal: "
-          call print_diagonal(A, n)
+          ! print *, "X = ", X
+          ! print *, "Diagonal: "
+          ! call print_diagonal(A, n)
         END IF
       END DO
       ! scale row i to have 1 on the diagonal
