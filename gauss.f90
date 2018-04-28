@@ -33,9 +33,9 @@ module gauss
     real(kind = iKIND) :: ratio
 
     print *, "Arrays to eliminate: "
-    call print_rows(A, n)          
-    call print_rows(X, n)          
-    
+    call print_rows(A, n)
+    call print_rows(X, n)
+
     do i = 1, N
       do j = 1, N
         IF ((i .NE. j) .AND. (A(i, i) .NE. 0)) THEN
@@ -44,7 +44,7 @@ module gauss
           X(j) = X(j) - ratio * x(i)
 
           print *, "After ", i, j, ": A = "
-          call print_rows(A, n)          
+          call print_rows(A, n)
 
           print *, "X = ", X
           print *, "Diagonal: "
@@ -57,12 +57,11 @@ module gauss
     END DO
 
     print *, "Eliminated arrays: A = "
-    call print_rows(A, n)          
+    call print_rows(A, n)
 
     print *, "X = ", X
     print *, "Diagonal: "
     call print_diagonal(A, n)
-      
+
   end subroutine eliminate
 end module gauss
-  
