@@ -1,31 +1,8 @@
 module gauss
-    use constants
+  use utils
   implicit none
 
-  ! integer, parameter :: iKIND2 = DEF_KIND
-
   contains
-  subroutine print_diagonal(A, n)
-    implicit none
-    integer :: i
-    integer, intent(in) :: n
-    real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
-    do i = 0, n
-      print *, A(i, i)
-    end do
-  end subroutine print_diagonal
-
-  subroutine print_rows(A, n)
-    use constants
-    implicit none
-    integer :: i
-    integer, intent(in) :: n
-    real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
-    do i = 0, n
-      print *, i, ": ", A(:, i)
-    end do
-  end subroutine print_rows
-
   subroutine eliminate(A, X, n)
     integer(kind=8), intent(in) :: n
     real(kind = iKIND), intent(inout) :: A(0:N, 0:N), X(0:N)

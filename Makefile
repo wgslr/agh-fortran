@@ -6,13 +6,13 @@ GFLAGS=-O3  -ffree-form -std=f2008 -fimplicit-none -Wall -pedantic -fbounds-chec
 
 all: out/main
 
-out/main: src/main.f90 out/constants.mod out/gauss.mod
+out/main: src/main.f90 out/utils.mod out/gauss.mod
 	ifort $^ -o $@ $(IFLAGS)
 
-out/gauss.mod: src/gauss.f90 out/constants.mod
+out/gauss.mod: src/gauss.f90 out/utils.mod
 	ifort $^ -c -o $@ $(IFLAGS)
 
-out/constants.mod: src/constants.f90
+out/utils.mod: src/utils.f90
 	ifort $^ -c -o $@ $(IFLAGS)
 	
 

@@ -1,5 +1,5 @@
 program main
-  use constants
+  use utils
   use gauss
   implicit none
   real(kind = iKIND), allocatable, dimension(:,:) :: A
@@ -48,13 +48,13 @@ program main
     print *, i, X(i)
   end do
 
-  ! ERROR(:) = X - IDEAL
-  ! print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
+  ERROR(:) = X - IDEAL
+  print *, iKIND, N, (SUM(ABS(ERROR)) / size(ERROR))
 
   contains
 
     subroutine init_matrices(A, X, n, h)
-      use constants
+      use utils
       integer(kind=8), intent(in) :: n
       integer(kind=8) :: i
       real(kind = iKIND), intent(inout) :: A(0:n, 0:n)
