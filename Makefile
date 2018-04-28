@@ -13,3 +13,6 @@ out/main: src/gauss.f90 src/constants.f90 src/main.f90
 out/gmain: src/*.f90
 	mkdir -p out
 	gfortran $^ -o $@ $(GFLAGS)
+
+clean:
+	rm -r out/*
